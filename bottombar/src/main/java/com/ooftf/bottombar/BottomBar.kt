@@ -10,22 +10,36 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     init {
         orientation = HORIZONTAL
     }
+
     var observer = MyDataSetObserver()
-    var onItemSelectIInterceptor: OnItemSelectIInterceptor? = null
-    var onItemSelectChangedListener: OnItemSelectChangedListener? = null
-    var onItemRepeatListener: OnItemRepeatListener? = null
-    var adapter: Adapter<out RecyclerView.ViewHolder>? = null
-        set(value) {
-            adapter?.unregisterAdapterDataObserver(observer)
-            field = value
-            adapter?.registerAdapterDataObserver(observer)
-            createItems()
-            setSelectedIndex(0)
-        }
+    var mOnItemSelectIInterceptor: OnItemSelectIInterceptor? = null
+    fun setOnItemSelectIInterceptor(interceptor: OnItemSelectIInterceptor) {
+        mOnItemSelectIInterceptor = interceptor
+    }
+
+    var mOnItemSelectChangedListener: OnItemSelectChangedListener? = null
+    fun setOnItemSelectChangedListener(listener: OnItemSelectChangedListener) {
+        mOnItemSelectChangedListener = listener
+    }
+
+    var mOnItemRepeatListener: OnItemRepeatListener? = null
+    fun setOnItemRepeatListener(listener: OnItemRepeatListener) {
+        mOnItemRepeatListener = listener
+    }
+
+    var mAdapter: Adapter<out RecyclerView.ViewHolder>? = null
+    fun setAdapter(adapter: Adapter<out RecyclerView.ViewHolder>) {
+        mAdapter?.unregisterAdapterDataObserver(observer)
+        mAdapter = adapter
+        mAdapter?.registerAdapterDataObserver(observer)
+        createItems()
+        setSelectedIndex(0)
+    }
+
     var selectIndex: Int = -1
     private fun createItems() {
         removeAllViews()
-        adapter?.let { adapterUnNull ->
+        mAdapter?.let { adapterUnNull ->
             (0 until adapterUnNull.itemCount).forEach { index ->
                 val viewHoler = adapterUnNull.createViewHolder(this, adapterUnNull.getItemViewType(index))
                 viewHoler.itemView.tag = viewHoler
@@ -47,18 +61,18 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     fun setSelectedIndex(index: Int) {
         if (!isLegal(index)) return
         if (index == selectIndex) {//判断是否重复点击
-            onItemRepeatListener?.onItemRepeat(selectIndex)
+            mOnItemRepeatListener?.onItemRepeat(selectIndex)
             return
         }
-        if (onItemSelectIInterceptor == null || !onItemSelectIInterceptor!!.onIntercept(selectIndex, index)) {//判断是否拦截
+        if (mOnItemSelectIInterceptor == null || !mOnItemSelectIInterceptor!!.onIntercept(selectIndex, index)) {//判断是否拦截
             //没有被拦截
-            onItemSelectChangedListener?.onItemSelectChanged(selectIndex, index)
+            mOnItemSelectChangedListener?.onItemSelectChanged(selectIndex, index)
             selectedAnimate(getChildAt(index))
             if (isLegal(selectIndex)) {
                 unSelectedAnimate(getChildAt(selectIndex))
             }
             selectIndex = index
-            adapter?.notifyDataSetChanged()
+            mAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -73,7 +87,7 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
 
     fun updateItems() {
         (0 until childCount).forEach {
-            (adapter as Adapter<RecyclerView.ViewHolder>).onBindViewHolder(getChildAt(it).tag as RecyclerView.ViewHolder, it, selectIndex)
+            (mAdapter as Adapter<RecyclerView.ViewHolder>).onBindViewHolder(getChildAt(it).tag as RecyclerView.ViewHolder, it, selectIndex)
         }
     }
 

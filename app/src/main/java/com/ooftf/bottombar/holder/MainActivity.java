@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomBar = findViewById(R.id.bottomBar);
         textView = findViewById(R.id.text);
-        bottomBar.setOnItemSelectChangedListener(new OnItemSelectChangedListener() {
+        bottomBar.setMOnItemSelectChangedListener(new OnItemSelectChangedListener() {
             @Override
             public void onItemSelectChanged(int oldIndex, int newIndex) {
                 if (newIndex == 0) {
@@ -36,19 +36,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        bottomBar.setOnItemSelectIInterceptor(new OnItemSelectIInterceptor() {
+        bottomBar.setMOnItemSelectIInterceptor(new OnItemSelectIInterceptor() {
             @Override
             public boolean onIntercept(int oldIndex, int newIndex) {
                 return isIntercept;
             }
         });
-        bottomBar.setOnItemRepeatListener(new OnItemRepeatListener() {
+        bottomBar.setMOnItemRepeatListener(new OnItemRepeatListener() {
             @Override
             public void onItemRepeat(int index) {
                 isIntercept = !isIntercept;
             }
         });
-        bottomBar.setAdapter(new BottomBar.Adapter<ViewHolder>() {
+        bottomBar.setMAdapter(new BottomBar.Adapter<ViewHolder>() {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position, int selectedPosition) {
                 if (position == selectedPosition) {
