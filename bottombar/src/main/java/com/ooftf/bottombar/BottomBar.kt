@@ -10,10 +10,10 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     init {
         orientation = HORIZONTAL
     }
-
     var observer = MyDataSetObserver()
-    var interceptor: ((oldIndex: Int, newIndex: Int) -> Boolean)? = null
-    var onItemSelectChangedListener: ((oldIndex: Int, newIndex: Int) -> Unit)? = null
+    var onItemSelectIInterceptor: OnItemSelectIInterceptor? = null
+    var onItemSelectChangedListener: OnItemSelectChangedListener? = null
+    var onItemRepeatListener: OnItemRepeatListener? = null
     var adapter: Adapter<out RecyclerView.ViewHolder>? = null
         set(value) {
             adapter?.unregisterAdapterDataObserver(observer)
@@ -46,11 +46,15 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
      */
     fun setSelectedIndex(index: Int) {
         if (!isLegal(index)) return
-        if (index == selectIndex) return
-        if (interceptor == null || !interceptor!!.invoke(selectIndex, index)) {
-            onItemSelectChangedListener?.invoke(selectIndex, index)
+        if (index == selectIndex) {//判断是否重复点击
+            onItemRepeatListener?.onItemRepeat(selectIndex)
+            return
+        }
+        if (onItemSelectIInterceptor == null || !onItemSelectIInterceptor!!.onIntercept(selectIndex, index)) {//判断是否拦截
+            //没有被拦截
+            onItemSelectChangedListener?.onItemSelectChanged(selectIndex, index)
             selectedAnimate(getChildAt(index))
-            if (isLegal(selectIndex)){
+            if (isLegal(selectIndex)) {
                 unSelectedAnimate(getChildAt(selectIndex))
             }
             selectIndex = index
