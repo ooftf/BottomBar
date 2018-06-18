@@ -15,7 +15,6 @@ import com.ooftf.bottombar.BottomBar;
 import com.ooftf.bottombar.OnItemRepeatListener;
 import com.ooftf.bottombar.OnItemSelectChangedListener;
 import com.ooftf.bottombar.OnItemSelectIInterceptor;
-import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
     BottomBar bottomBar;
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = findViewById(R.id.bottomBar);
         textView = findViewById(R.id.text);
         bottomBar.setOnItemSelectChangedListener(new OnItemSelectChangedListener() {
             @Override
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
         bottomBar.setAdapter(new BottomBar.Adapter<ViewHolder>() {
             @Override
-            public void onBindViewHolder(@NotNull ViewHolder holder, int position, int selectedPosition) {
+            public void onBindViewHolder(ViewHolder holder, int position, int selectedPosition) {
                 if (position == selectedPosition) {
                     holder.title.setTextColor(Color.parseColor("#2196F3"));
                     switch (position) {
