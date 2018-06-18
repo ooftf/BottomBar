@@ -12,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ooftf.bottombar.BottomBar;
-import com.ooftf.bottombar.OnItemRepeatListener;
-import com.ooftf.bottombar.OnItemSelectChangedListener;
-import com.ooftf.bottombar.OnItemSelectIInterceptor;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 public class MainActivity extends AppCompatActivity {
     BottomBar bottomBar;
@@ -26,29 +27,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomBar = findViewById(R.id.bottomBar);
         textView = findViewById(R.id.text);
-        bottomBar.setMOnItemSelectChangedListener(new OnItemSelectChangedListener() {
+        bottomBar.setOnItemSelectChangedListener(new Function2<Integer, Integer, Unit>() {
             @Override
-            public void onItemSelectChanged(int oldIndex, int newIndex) {
+            public Unit invoke(Integer oldIndex, Integer newIndex) {
                 if (newIndex == 0) {
                     textView.setText("First");
                 } else if (newIndex == 1) {
                     textView.setText("Second");
                 }
+                return null;
             }
         });
-        bottomBar.setMOnItemSelectIInterceptor(new OnItemSelectIInterceptor() {
+        bottomBar.setOnItemSelectIInterceptor(new Function2<Integer, Integer, Boolean>() {
             @Override
-            public boolean onIntercept(int oldIndex, int newIndex) {
+            public Boolean invoke(Integer integer, Integer integer2) {
                 return isIntercept;
             }
         });
-        bottomBar.setMOnItemRepeatListener(new OnItemRepeatListener() {
+        bottomBar.setOnItemRepeatListener(new Function1<Integer, Unit>() {
             @Override
-            public void onItemRepeat(int index) {
+            public Unit invoke(Integer integer) {
                 isIntercept = !isIntercept;
+                return null;
             }
         });
-        bottomBar.setMAdapter(new BottomBar.Adapter<ViewHolder>() {
+        bottomBar.setAdapter(new BottomBar.Adapter<ViewHolder>() {
             @Override
             public void onBindViewHolder(ViewHolder holder, int position, int selectedPosition) {
                 if (position == selectedPosition) {

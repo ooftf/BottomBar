@@ -12,22 +12,22 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     }
 
     var observer = MyDataSetObserver()
-    var mOnItemSelectIInterceptor: OnItemSelectIInterceptor? = null
-    fun setOnItemSelectIInterceptor(interceptor: OnItemSelectIInterceptor) {
+    var mOnItemSelectIInterceptor: ((oldIndex: Int, newIndex: Int) -> Boolean)? = null
+    fun setOnItemSelectIInterceptor(interceptor: (oldIndex: Int, newIndex: Int) -> Boolean) {
         mOnItemSelectIInterceptor = interceptor
     }
 
-    var mOnItemSelectChangedListener: OnItemSelectChangedListener? = null
-    fun setOnItemSelectChangedListener(listener: OnItemSelectChangedListener) {
+    var mOnItemSelectChangedListener: ((oldIndex: Int, newIndex: Int) -> Unit)? = null
+    fun setOnItemSelectChangedListener(listener: (oldIndex: Int, newIndex: Int) -> Unit) {
         mOnItemSelectChangedListener = listener
     }
 
-    var mOnItemRepeatListener: OnItemRepeatListener? = null
-    fun setOnItemRepeatListener(listener: OnItemRepeatListener) {
+    var mOnItemRepeatListener: ((index: Int) -> Unit)? = null
+    fun setOnItemRepeatListener(listener: (index: Int) -> Unit) {
         mOnItemRepeatListener = listener
     }
 
-    var mAdapter: Adapter<out RecyclerView.ViewHolder>? = null
+    private var mAdapter: Adapter<out RecyclerView.ViewHolder>? = null
     fun setAdapter(adapter: Adapter<out RecyclerView.ViewHolder>) {
         mAdapter?.unregisterAdapterDataObserver(observer)
         mAdapter = adapter
@@ -61,12 +61,12 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     fun setSelectedIndex(index: Int) {
         if (!isLegal(index)) return
         if (index == selectIndex) {//判断是否重复点击
-            mOnItemRepeatListener?.onItemRepeat(selectIndex)
+            mOnItemRepeatListener?.invoke(selectIndex)
             return
         }
-        if (mOnItemSelectIInterceptor == null || !mOnItemSelectIInterceptor!!.onIntercept(selectIndex, index)) {//判断是否拦截
+        if (mOnItemSelectIInterceptor == null || !mOnItemSelectIInterceptor!!.invoke(selectIndex, index)) {//判断是否拦截
             //没有被拦截
-            mOnItemSelectChangedListener?.onItemSelectChanged(selectIndex, index)
+            mOnItemSelectChangedListener?.invoke(selectIndex, index)
             selectedAnimate(getChildAt(index))
             if (isLegal(selectIndex)) {
                 unSelectedAnimate(getChildAt(selectIndex))
