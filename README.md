@@ -16,7 +16,7 @@ allprojects {
 dependencies {
     ...
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.github.ooftf:BottomBar:1.1.0'
+    implementation 'com.github.ooftf:BottomBar:1.2.0'
     implementation "com.android.support:appcompat-v7:$support"
 }
 ```
