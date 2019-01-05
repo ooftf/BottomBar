@@ -1,10 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 27
-
-
 
     defaultConfig {
         minSdkVersion 14
@@ -15,7 +12,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -24,13 +24,29 @@ android {
     }
 
 }
-
+sourceCompatibility = "7"
+targetCompatibility = "7"
+publish {
+    repoName = 'maven'
+    userOrg = 'ooftf'      // bintray注册的用户名
+    groupId = 'com.ooftf'
+    artifactId = 'bottombar-java'// bintray创建的package
+    publishVersion = '1.1.0'
+    desc = 'nothing'
+    bintrayUser = 'ooftf'
+    bintrayKey = bintray_key
+    dryRun = false
+}
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "com.android.support:support-v4:27.1.1"
     compileOnly "com.android.support:recyclerview-v7:27.1.1"
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
