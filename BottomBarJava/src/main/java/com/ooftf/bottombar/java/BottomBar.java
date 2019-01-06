@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BottomBar extends LinearLayout {
     MyDataSetObserver observer = new MyDataSetObserver();
-    OnItemSelectIInterceptor mOnItemSelectIInterceptor;
+    OnItemSelectInterceptor mOnItemSelectIInterceptor;
     OnItemSelectIChangedListener mOnItemSelectChangedListener;
     OnItemRepeatListener mOnItemRepeatListener;
     int selectIndex = -1;
@@ -26,7 +26,7 @@ public class BottomBar extends LinearLayout {
     }
 
 
-    public void setOnItemSelectIInterceptor(OnItemSelectIInterceptor interceptor) {
+    public void setOnItemSelectInterceptor(OnItemSelectInterceptor interceptor) {
         mOnItemSelectIInterceptor = interceptor;
     }
 
@@ -64,7 +64,7 @@ public class BottomBar extends LinearLayout {
         }
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             RecyclerView.ViewHolder viewHolder = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
-            viewHolder.itemView.setTag(viewHolder);
+            viewHolder.itemView.setTag(R.id.bottom_bar_view_holder_tag_id, viewHolder);
             mAdapter.onBindViewHolder(viewHolder, i, selectIndex);
             addView(viewHolder.itemView);
             LinearLayout.LayoutParams layoutParams = (LayoutParams) viewHolder.itemView.getLayoutParams();
@@ -131,7 +131,7 @@ public class BottomBar extends LinearLayout {
             return;
         }
         for (int i = 0; i < getChildCount(); i++) {
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) getChildAt(i).getTag();
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) getChildAt(i).getTag(R.id.bottom_bar_view_holder_tag_id);
             mAdapter.onBindViewHolder(viewHolder, i, selectIndex);
         }
     }
@@ -154,11 +154,11 @@ public class BottomBar extends LinearLayout {
 
     }
 
-    abstract class Adapter<VH extends RecyclerView.ViewHolder, B> extends RecyclerView.Adapter<VH> {
-        List<B> data = new ArrayList<>();
+    public abstract static class Adapter<VH extends RecyclerView.ViewHolder, B> extends RecyclerView.Adapter<VH> {
+        private List<B> data = new ArrayList<>();
 
         @Override
-        public final void onBindViewHolder(VH holder, int position) {
+        public final void onBindViewHolder(@NonNull VH holder, int position) {
 
         }
 
@@ -178,6 +178,10 @@ public class BottomBar extends LinearLayout {
 
         public void addAll(List<B> list) {
             data.addAll(list);
+        }
+
+        public void add(B item) {
+            data.add(item);
         }
 
         public void setData(@NonNull List<B> data) {

@@ -107,7 +107,7 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
 
     }
 
-    abstract class Adapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+    abstract  class Adapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
         final override fun onBindViewHolder(holder: VH, position: Int) {
 
         }
