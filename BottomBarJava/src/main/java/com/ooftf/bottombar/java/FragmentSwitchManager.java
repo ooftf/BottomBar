@@ -1,10 +1,10 @@
 package com.ooftf.bottombar.java;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -14,22 +14,22 @@ import java.util.Set;
 class FragmentSwitchManager {
     private FragmentManager manager;
     private int containerViewId;
-    private Set<String> tags = new HashSet<>();
-    private com.ooftf.bottombar.java.OnFragmentCommitListener OnFragmentCommitListener;
+    private Set<String> tags;
+    private OnFragmentCommitListener OnFragmentCommitListener;
     private FragmentCreator createFragment;
 
-    public FragmentSwitchManager(FragmentManager manager, int containerViewId, FragmentCreator creator) {
+    public FragmentSwitchManager(@NonNull FragmentManager manager, @NonNull int containerViewId, @NonNull Set<String> tags, @NonNull FragmentCreator creator) {
         this.manager = manager;
         this.createFragment = creator;
         this.containerViewId = containerViewId;
+        this.tags = tags;
     }
 
-    public void setOnFragmentCommitListener(com.ooftf.bottombar.java.OnFragmentCommitListener onFragmentCommitListener) {
+    public void setOnFragmentCommitListener(OnFragmentCommitListener onFragmentCommitListener) {
         this.OnFragmentCommitListener = onFragmentCommitListener;
     }
 
     void switchFragment(String tagId) {
-        tags.add(tagId);
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         hideOther(fragmentTransaction, tagId);
         Fragment fragment = getFragment(fragmentTransaction, tagId);

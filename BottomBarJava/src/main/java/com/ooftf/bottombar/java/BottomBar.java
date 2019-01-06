@@ -52,8 +52,8 @@ public class BottomBar extends LinearLayout {
 
         mAdapter = adapter;
         mAdapter.registerAdapterDataObserver(observer);
+        selectIndex = -1;
         createItems();
-        setSelectedIndex(0);
     }
 
 
@@ -63,16 +63,16 @@ public class BottomBar extends LinearLayout {
             return;
         }
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            RecyclerView.ViewHolder viewHoler = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
-            viewHoler.itemView.setTag(viewHoler);
-            mAdapter.onBindViewHolder(viewHoler, i, selectIndex);
-            addView(viewHoler.itemView);
-            LinearLayout.LayoutParams layoutParams = (LayoutParams) viewHoler.itemView.getLayoutParams();
+            RecyclerView.ViewHolder viewHolder = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
+            viewHolder.itemView.setTag(viewHolder);
+            mAdapter.onBindViewHolder(viewHolder, i, selectIndex);
+            addView(viewHolder.itemView);
+            LinearLayout.LayoutParams layoutParams = (LayoutParams) viewHolder.itemView.getLayoutParams();
             layoutParams.weight = 1f;
             layoutParams.height = LayoutParams.MATCH_PARENT;
             layoutParams.width = 0;
             final int finalI = i;
-            viewHoler.itemView.setOnClickListener(new OnClickListener() {
+            viewHolder.itemView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     setSelectedIndex(finalI);
@@ -167,6 +167,13 @@ public class BottomBar extends LinearLayout {
             return data.size();
         }
 
+        /**
+         * onBindViewHolder
+         *
+         * @param holder
+         * @param position
+         * @param selectedPosition
+         */
         public abstract void onBindViewHolder(VH holder, int position, int selectedPosition);
 
         public void addAll(List<B> list) {
