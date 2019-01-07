@@ -8,7 +8,7 @@
 #### Project
 dependencies {
     ...
-    implementation 'com.ooftf:bottombar-java:1.2.0'
+    implementation 'com.ooftf:bottombar-java:1.2.1'
     implementation "com.android.support:support-v4:$support"
     implementation "com.android.support:recyclerview-v7:$support"
     implementation "com.android.support:appcompat-v7:$support"

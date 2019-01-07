@@ -188,7 +188,7 @@ public class BottomBar extends LinearLayout {
             this.data = data;
         }
 
-        public List<B> setData() {
+        public List<B> getData() {
             return data;
         }
 
