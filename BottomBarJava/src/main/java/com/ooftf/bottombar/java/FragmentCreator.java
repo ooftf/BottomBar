@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
  * @email 994749769@qq.com
  * @date 2019/1/5 0005
  */
-public interface FragmentCreator {
+public interface FragmentCreator<T> {
     /**
      * 创建fragment
      * @param tag
      * @return
      */
-    Fragment create(String tag);
+    Fragment create(T tag);
 }

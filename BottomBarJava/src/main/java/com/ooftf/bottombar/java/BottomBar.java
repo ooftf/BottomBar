@@ -188,6 +188,10 @@ public class BottomBar extends LinearLayout {
             this.data = data;
         }
 
+        public List<B> setData() {
+            return data;
+        }
+
         public B getItem(int position) {
             if (position < 0 || position >= data.size()) {
                 return null;

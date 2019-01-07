@@ -7,12 +7,12 @@ import android.support.v4.app.Fragment;
  * @email 994749769@qq.com
  * @date 2019/1/5 0005
  */
-public interface OnFragmentCommitListener {
+public interface OnFragmentCommitListener<T> {
     /**
      * frament创建之后，提交之前调用
      *
      * @param tag
      * @param fragment
      */
-    void onFragmentCommit(String tag, Fragment fragment);
+    void onFragmentCommit(T tag, Fragment fragment);
 }
