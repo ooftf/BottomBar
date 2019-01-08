@@ -56,6 +56,9 @@ public class BottomBar extends LinearLayout {
         createItems();
     }
 
+    public int getSelectIndex() {
+        return selectIndex;
+    }
 
     private void createItems() {
         removeAllViews();
