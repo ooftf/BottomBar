@@ -6,6 +6,9 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 
+/**
+ * 暂时停止维护，先使用bottombarJava，后续再转移到kotlin
+ */
 class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     init {
         orientation = HORIZONTAL
@@ -107,7 +110,7 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
 
     }
 
-    abstract  class Adapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+    abstract class Adapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
         final override fun onBindViewHolder(holder: VH, position: Int) {
 
         }

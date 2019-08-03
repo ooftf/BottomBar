@@ -53,36 +53,13 @@ public class BottomBar extends LinearLayout {
         mAdapter = adapter;
         mAdapter.registerAdapterDataObserver(observer);
         selectIndex = -1;
-        createItems();
+        updateItems();
     }
 
     public int getSelectIndex() {
         return selectIndex;
     }
 
-    private void createItems() {
-        removeAllViews();
-        if (mAdapter == null) {
-            return;
-        }
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            RecyclerView.ViewHolder viewHolder = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
-            viewHolder.itemView.setTag(R.id.bottom_bar_view_holder_tag_id, viewHolder);
-            mAdapter.onBindViewHolder(viewHolder, i, selectIndex);
-            addView(viewHolder.itemView);
-            LinearLayout.LayoutParams layoutParams = (LayoutParams) viewHolder.itemView.getLayoutParams();
-            layoutParams.weight = 1f;
-            layoutParams.height = LayoutParams.MATCH_PARENT;
-            layoutParams.width = 0;
-            final int finalI = i;
-            viewHolder.itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setSelectedIndex(finalI);
-                }
-            });
-        }
-    }
 
     /**
      * 设置新的选中index
@@ -133,10 +110,31 @@ public class BottomBar extends LinearLayout {
         if (mAdapter == null) {
             return;
         }
-        for (int i = 0; i < getChildCount(); i++) {
-            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) getChildAt(i).getTag(R.id.bottom_bar_view_holder_tag_id);
-            mAdapter.onBindViewHolder(viewHolder, i, selectIndex);
+
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            RecyclerView.ViewHolder holder = findViewHolderByPosition(i);
+            if (holder == null) {
+                holder = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
+                holder.itemView.setTag(R.id.bottom_bar_view_holder_tag_id, holder);
+                LinearLayout.LayoutParams layoutParams = new LayoutParams(0, LayoutParams.MATCH_PARENT, 1f);
+                holder.itemView.setLayoutParams(layoutParams);
+                final int finalI = i;
+                holder.itemView.setOnClickListener(v -> setSelectedIndex(finalI));
+                addView(holder.itemView);
+            }
+            mAdapter.onBindViewHolder(holder, i, selectIndex);
         }
+
+        for (int i = mAdapter.getItemCount(); i < getChildCount(); i++) {
+            removeView(getChildAt(i));
+        }
+    }
+
+    private RecyclerView.ViewHolder findViewHolderByPosition(int i) {
+        if (i >= getChildCount()) {
+            return null;
+        }
+        return (RecyclerView.ViewHolder) getChildAt(i).getTag(R.id.bottom_bar_view_holder_tag_id);
     }
 
     private void selectedAnimate(View view) {
