@@ -5,13 +5,9 @@
 ## 使用方式
 ### Gradle
 ``` Gradle
-#### Project
 dependencies {
     ...
-    implementation 'com.ooftf:bottombar-java:1.2.1'
-    implementation "com.android.support:support-v4:$support"
-    implementation "com.android.support:recyclerview-v7:$support"
-    implementation "com.android.support:appcompat-v7:$support"
+    implementation 'com.ooftf:bottombar-java:1.2.5'
 }
 ```
 ### XML
@@ -21,7 +17,7 @@ dependencies {
         android:elevation="20dp"
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_appbar_height"
+        android:layout_height="@dimen/layout_appbar_height"/>
 
 ```
 ## 属性和方法
