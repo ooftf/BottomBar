@@ -6,5 +6,5 @@ package com.ooftf.bottombar.java;
  * @date 2019/1/5 0005
  */
 public interface OnItemRepeatListener {
-    boolean onItemRepeat(int position);
+    void onItemRepeat(int position);
 }
