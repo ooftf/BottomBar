@@ -1,9 +1,9 @@
 package com.ooftf.bottombar.java;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Set;
 
@@ -48,6 +48,9 @@ public class FragmentSwitchManager<T> {
             }
             Fragment fragment = manager.findFragmentByTag(tag.toString());
             if (fragment != null) {
+                if (!fragment.isAdded()) {
+                    fragmentTransaction.add(containerViewId, fragment, tag.toString());
+                }
                 fragmentTransaction.hide(fragment);
             }
 
@@ -58,6 +61,8 @@ public class FragmentSwitchManager<T> {
         Fragment fragment = manager.findFragmentByTag(tagId.toString());
         if (null == fragment) {
             fragment = createFragment.create(tagId);
+        }
+        if (fragment != null && !fragment.isAdded()) {
             fragmentTransaction.add(containerViewId, fragment, tagId.toString());
         }
         return fragment;
