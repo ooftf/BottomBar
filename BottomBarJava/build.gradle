@@ -31,7 +31,7 @@ publish {
     userOrg = 'ooftf'      // bintray注册的用户名
     groupId = 'com.ooftf'
     artifactId = 'bottombar-java'// bintray创建的package
-    publishVersion = '1.2.6'
+    publishVersion = '1.2.7'
     desc = 'nothing'
     bintrayUser = 'ooftf'
     bintrayKey = bintray_key
@@ -49,5 +49,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
     compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
-    compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
 }

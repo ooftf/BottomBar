@@ -39,6 +39,7 @@ public class FragmentSwitchManager<T> {
             OnFragmentCommitListener.onFragmentCommit(tagId, fragment);
         }
         fragmentTransaction.show(fragment).commitAllowingStateLoss();
+        manager.executePendingTransactions();
     }
 
     private void hideOther(FragmentTransaction fragmentTransaction, T tagId) {
