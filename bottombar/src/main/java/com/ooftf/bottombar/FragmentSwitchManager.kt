@@ -1,8 +1,7 @@
 package com.ooftf.bottombar
-
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 
 /**
@@ -28,7 +27,6 @@ class FragmentSwitchManager(
         var fragment: Fragment = getFragment(fragmentTransaction, tagId)
         onPreSwitch?.invoke(tagId, fragment)
         fragmentTransaction.show(fragment).commitAllowingStateLoss()
-        manager.executePendingTransactions()
     }
 
     private fun hideOther(fragmentTransaction: FragmentTransaction, tagId: String) {
