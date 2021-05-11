@@ -1,171 +1,139 @@
-package com.ooftf.bottombar.java;
+package com.ooftf.bottombar.java
 
-import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.content.Context
+import android.util.AttributeSet
+import android.view.View
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class BottomBar extends LinearLayout {
-    MyDataSetObserver observer = new MyDataSetObserver();
-    OnItemSelectInterceptor mOnItemSelectIInterceptor;
-    OnItemSelectIChangedListener mOnItemSelectChangedListener;
-    OnItemRepeatListener mOnItemRepeatListener;
-    int selectIndex = -1;
-
-    public BottomBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context, attrs) {
+    var observer: MyDataSetObserver = MyDataSetObserver()
+    var mOnItemSelectIInterceptor: OnItemSelectInterceptor? = null
+    var mOnItemSelectChangedListener: OnItemSelectIChangedListener? = null
+    var mOnItemRepeatListener: OnItemRepeatListener? = null
+    var selectIndex = -1
+    fun setOnItemSelectInterceptor(interceptor: OnItemSelectInterceptor?) {
+        mOnItemSelectIInterceptor = interceptor
     }
 
-    {
-        setOrientation(HORIZONTAL);
+    fun setOnItemSelectChangedListener(listener: OnItemSelectIChangedListener?) {
+        mOnItemSelectChangedListener = listener
     }
 
-
-    public void setOnItemSelectInterceptor(OnItemSelectInterceptor interceptor) {
-        mOnItemSelectIInterceptor = interceptor;
+    fun setOnItemRepeatListener(listener: OnItemRepeatListener?) {
+        mOnItemRepeatListener = listener
     }
 
-
-    public void setOnItemSelectChangedListener(OnItemSelectIChangedListener listener) {
-        mOnItemSelectChangedListener = listener;
-    }
-
-
-    public void setOnItemRepeatListener(OnItemRepeatListener listener) {
-        mOnItemRepeatListener = listener;
-    }
-
-    private Adapter mAdapter;
-
-    public void setAdapter(Adapter adapter) {
+    private var mAdapter: Adapter<*, *>? = null
+    fun setAdapter(adapter: Adapter<*, *>?) {
         if (adapter == null) {
-            return;
+            return
         }
         if (mAdapter != null) {
-            mAdapter.unregisterAdapterDataObserver(observer);
+            mAdapter!!.unregisterAdapterDataObserver(observer)
         }
-
-        mAdapter = adapter;
-        mAdapter.registerAdapterDataObserver(observer);
-        selectIndex = -1;
-        updateItems();
+        mAdapter = adapter
+        mAdapter!!.registerAdapterDataObserver(observer)
+        selectIndex = -1
+        updateItems()
     }
-
-    public int getSelectIndex() {
-        return selectIndex;
-    }
-
 
     /**
      * 设置新的选中index
      */
-    public void setSelectedIndex(int index) {
+    fun setSelectedIndex(index: Int) {
         if (!isLegal(index)) {
-            return;
+            return
         }
         //判断是否重复点击
         if (index == selectIndex) {
             if (mOnItemRepeatListener != null) {
-                mOnItemRepeatListener.onItemRepeat(selectIndex);
+                mOnItemRepeatListener!!.onItemRepeat(selectIndex)
             }
-            return;
+            return
         }
-        if (mOnItemSelectIInterceptor != null && mOnItemSelectIInterceptor.onItemSelect(selectIndex, index)) {
-            return;
+        if (mOnItemSelectIInterceptor != null && mOnItemSelectIInterceptor!!.onItemSelect(
+                selectIndex,
+                index
+            )
+        ) {
+            return
         }
 
         //没有被拦截
         if (mOnItemSelectChangedListener != null) {
-            mOnItemSelectChangedListener.onItemSelect(selectIndex, index);
+            mOnItemSelectChangedListener!!.onItemSelect(selectIndex, index)
         }
-        selectedAnimate(getChildAt(index));
+        selectedAnimate(getChildAt(index))
         if (isLegal(selectIndex)) {
-            unSelectedAnimate(getChildAt(selectIndex));
+            unSelectedAnimate(getChildAt(selectIndex))
         }
-        selectIndex = index;
+        selectIndex = index
         if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
+            mAdapter!!.notifyDataSetChanged()
         }
     }
 
     /**
      * 判断Index是否合法
      */
-    private boolean isLegal(int index) {
+    private fun isLegal(index: Int): Boolean {
         if (index < 0) {
-            return false;
+            return false
         }
-        if (index >= getChildCount()) {
-            return false;
-        }
-        return true;
+        return if (index >= childCount) {
+            false
+        } else true
     }
 
-    private void updateItems() {
+    private fun updateItems() {
         if (mAdapter == null) {
-            return;
+            return
         }
-
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            RecyclerView.ViewHolder holder = findViewHolderByPosition(i);
+        for (i in 0 until mAdapter!!.itemCount) {
+            var holder = findViewHolderByPosition(i)
             if (holder == null) {
-                holder = mAdapter.createViewHolder(this, mAdapter.getItemViewType(i));
-                holder.itemView.setTag(R.id.bottom_bar_view_holder_tag_id, holder);
-                LinearLayout.LayoutParams layoutParams = new LayoutParams(0, LayoutParams.MATCH_PARENT, 1f);
-                holder.itemView.setLayoutParams(layoutParams);
-                final int finalI = i;
-                holder.itemView.setOnClickListener(v -> setSelectedIndex(finalI));
-                addView(holder.itemView);
+                holder = mAdapter!!.createViewHolder(this, mAdapter!!.getItemViewType(i))
+                holder!!.itemView.setTag(R.id.bottom_bar_view_holder_tag_id, holder)
+                val layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT, 1f)
+                holder.itemView.layoutParams = layoutParams
+                holder.itemView.setOnClickListener { v: View? -> setSelectedIndex(i) }
+                addView(holder.itemView)
             }
-            mAdapter.onBindViewHolder(holder, i, selectIndex);
+            mAdapter.onBindViewHolder(holder, i, selectIndex)
         }
-
-        for (int i = mAdapter.getItemCount(); i < getChildCount(); i++) {
-            removeView(getChildAt(i));
+        for (i in mAdapter!!.itemCount until childCount) {
+            removeView(getChildAt(i))
         }
     }
 
-    private RecyclerView.ViewHolder findViewHolderByPosition(int i) {
-        if (i >= getChildCount()) {
-            return null;
+    private fun findViewHolderByPosition(i: Int): RecyclerView.ViewHolder? {
+        return if (i >= childCount) {
+            null
+        } else getChildAt(i).getTag(R.id.bottom_bar_view_holder_tag_id) as RecyclerView.ViewHolder
+    }
+
+    private fun selectedAnimate(view: View) {
+        view.animate().translationY(-5f).scaleX(1.03f).scaleY(1.03f).setDuration(200).start()
+    }
+
+    private fun unSelectedAnimate(view: View) {
+        view.animate().translationY(0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).start()
+    }
+
+    inner class MyDataSetObserver : RecyclerView.AdapterDataObserver() {
+        override fun onChanged() {
+            super.onChanged()
+            updateItems()
         }
-        return (RecyclerView.ViewHolder) getChildAt(i).getTag(R.id.bottom_bar_view_holder_tag_id);
     }
 
-    private void selectedAnimate(View view) {
-        view.animate().translationY(-5f).scaleX(1.03f).scaleY(1.03f).setDuration(200).start();
-    }
-
-    private void unSelectedAnimate(View view) {
-        view.animate().translationY(0f).scaleX(1.0f).scaleY(1.0f).setDuration(200).start();
-    }
-
-
-    class MyDataSetObserver extends RecyclerView.AdapterDataObserver {
-        @Override
-        public void onChanged() {
-            super.onChanged();
-            updateItems();
-        }
-
-    }
-
-    public abstract static class Adapter<VH extends RecyclerView.ViewHolder, B> extends RecyclerView.Adapter<VH> {
-        private List<B> data = new ArrayList<>();
-
-        @Override
-        public final void onBindViewHolder(@NonNull VH holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return data.size();
+    abstract class Adapter<VH : RecyclerView.ViewHolder?, B> : RecyclerView.Adapter<VH>() {
+        private var data: MutableList<B> = ArrayList()
+        override fun onBindViewHolder(holder: VH, position: Int) {}
+        override fun getItemCount(): Int {
+            return data.size
         }
 
         /**
@@ -175,33 +143,35 @@ public class BottomBar extends LinearLayout {
          * @param position
          * @param selectedPosition
          */
-        public abstract void onBindViewHolder(VH holder, int position, int selectedPosition);
-
-        public void addAll(List<B> list) {
-            data.addAll(list);
+        abstract fun onBindViewHolder(holder: VH, position: Int, selectedPosition: Int)
+        fun addAll(list: List<B>?) {
+            data.addAll(list!!)
         }
 
-        public void add(B item) {
-            data.add(item);
+        fun add(item: B) {
+            data.add(item)
         }
 
-        public void setData(@NonNull List<B> data) {
-            this.data = data;
+        fun setData(data: MutableList<B>) {
+            this.data = data
         }
 
-        public List<B> getData() {
-            return data;
+        fun getData(): List<B> {
+            return data
         }
 
-        public B getItem(int position) {
-            if (position < 0 || position >= data.size()) {
-                return null;
-            }
-            return data.get(position);
+        fun getItem(position: Int): B? {
+            return if (position < 0 || position >= data.size) {
+                null
+            } else data[position]
         }
 
-        public void clear() {
-            data.clear();
+        fun clear() {
+            data.clear()
         }
+    }
+
+    init {
+        orientation = HORIZONTAL
     }
 }

@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'ooftf-maven'
+apply plugin: 'kotlin-android'
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 30
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -22,32 +21,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
 }
-sourceCompatibility = "7"
-targetCompatibility = "7"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 publish {
-    repoName = 'maven'
-    userOrg = 'ooftf'      // bintray注册的用户名
-    groupId = 'com.ooftf'
     artifactId = 'bottombar-java'// bintray创建的package
-    publishVersion = '1.2.7'
-    desc = 'nothing'
-    bintrayUser = 'ooftf'
-    bintrayKey = bintray_key
-    dryRun = false
-}
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
+    version = '1.2.7'
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
-    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.2.0'
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
