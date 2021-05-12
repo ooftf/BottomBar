@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/text"
-        android:background="#AAAAAA"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text="Hello World!"
-        android:gravity="center" />
+    <data>
 
-    <com.ooftf.bottombar.BottomBar
-        android:background="#FFFFFF"
-        android:id="@+id/bottomBar"
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-       />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity2">
+
+        <FrameLayout
+            android:id="@+id/text"
+            android:background="#AAAAAA"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center" />
+
+        <com.ooftf.bottombar.BottomBar
+            android:background="#FFFFFF"
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp" />
+    </LinearLayout>
+</layout>

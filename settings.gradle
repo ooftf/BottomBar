@@ -1,1 +1,1 @@
-include ':app', ':BottomBarJava'
+include ':app', ':bottom-bar'

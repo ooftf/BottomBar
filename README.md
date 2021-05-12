@@ -7,12 +7,12 @@
 ``` Gradle
 dependencies {
     ...
-    implementation 'com.ooftf:bottombar-java:1.2.5'
+    implementation 'com.github.ooftf:bottom-bar:1.3.0'
 }
 ```
 ### XML
 ```xml
-<com.ooftf.bottombar.java.BottomBar
+<com.ooftf.bottombar.BottomBar
         android:background="@color/background"
         android:elevation="20dp"
         android:id="@+id/bottomBar"
