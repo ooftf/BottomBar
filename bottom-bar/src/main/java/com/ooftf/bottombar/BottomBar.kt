@@ -14,12 +14,35 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
     var onItemRepeatListener: ((position: Int) -> Unit)? = null
     var currentIndex = -1
         private set
+    val observable by lazy {
+        object : Observable {
+            override fun onItemChange(position: Int) {
+                updateItem(position)
+            }
 
+            override fun onChange() {
+                updateItems()
+            }
+
+        }
+    }
     private var mAdapter: Adapter<out ViewHolder>? = null
     fun setAdapter(adapter: Adapter<out ViewHolder>) {
+        mAdapter?.unRegister(observable)
+        adapter.register(observable)
         mAdapter = adapter
         currentIndex = -1
         updateItems()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        mAdapter?.register(observable)
+    }
+
+    override fun onDetachedFromWindow() {
+        mAdapter?.unRegister(observable)
+        super.onDetachedFromWindow()
     }
 
     /**
@@ -115,6 +138,32 @@ class BottomBar(context: Context?, attrs: AttributeSet?) : LinearLayout(context,
         abstract fun onBindViewHolder(holder: VH, position: Int, selectedPosition: Int)
         abstract fun onCreateViewHolder(parent: ViewGroup): VH
         abstract fun getItemCount(): Int
+        val observables = HashSet<Observable>()
+        fun register(observable: Observable) {
+            observables.add(observable)
+        }
+
+        fun unRegister(observable: Observable) {
+            observables.remove(observable)
+        }
+
+        fun notifyItemChanged(position: Int) {
+            observables.forEach {
+                it.onItemChange(position)
+            }
+        }
+
+        fun notifyDataSetChanged() {
+            observables.forEach {
+                it.onChange()
+            }
+        }
+
+    }
+
+    interface Observable {
+        fun onItemChange(position: Int)
+        fun onChange()
     }
 
     abstract class ViewHolder(val itemView: View) {
