@@ -1,5 +1,6 @@
-[ ![Download](https://api.bintray.com/packages/ooftf/maven/bottombar-java/images/download.svg) ](https://bintray.com/ooftf/maven/bottombar-java/_latestVersion)
 # BottomBar
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.ooftf/bottom-bar/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.ooftf/bottom-bar)
+
 一个底部导航栏，和主流的区别在于样式需要自己定义，这样虽然使用起来比较麻烦，但是扩展性也比较好
 暂时扩展属性比较少，后续可能会继续扩展细节属性
 ## 使用方式
@@ -7,7 +8,7 @@
 ``` Gradle
 dependencies {
     ...
-    implementation 'com.github.ooftf:bottom-bar:1.3.0'
+    implementation 'com.github.ooftf:bottom-bar:1.3.1'
 }
 ```
 ### XML
